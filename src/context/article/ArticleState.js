@@ -1,8 +1,10 @@
 import React, { useReducer } from "react";
-import uuid from "uuid";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import ArticleContext from "./articleContext";
 import articleReducer from "./articleReducer";
 import {
+  GET_ARTICLES,
   ADD_ARTICLE,
   DELETE_ARTICLE,
   SET_CURRENT_ARTICLE,
@@ -12,37 +14,79 @@ import {
   CLEAR_FILTER,
 } from "../types";
 
-import { posts } from "./data";
-
 const ArticleState = (props) => {
   const initialState = {
-    posts,
+    articles: [],
+    current: null,
+    filtered: null,
+    loading: true,
   };
 
   const [state, dispatch] = useReducer(articleReducer, initialState);
 
-  //add contact
+  //get articles
+  const getArticles = async () => {
+    try {
+      const res = await axios.get("http://localhost:1337/articles");
+      console.log(res.data);
+      dispatch({ type: GET_ARTICLES, payload: res.data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  //delete contact
+  //add article
+  const addArticle = (article) => {
+    article.id = uuidv4();
+    dispatch({ type: ADD_ARTICLE, payload: article });
+  };
 
-  //set current contact
+  //delete article
+  const deleteArticle = (id) => {
+    dispatch({ type: DELETE_ARTICLE, payload: id });
+  };
 
-  //clear current contact
-
+  //set current article
+  const setCurrentArticle = (article) => {
+    dispatch({ type: SET_CURRENT_ARTICLE, payload: article });
+  };
+  //clear current article
+  const clearCurrentArticle = () => {
+    dispatch({ type: CLEAR_CURRENT_ARTICLE });
+  };
   //update contact
+  const updateArticle = (article) => {
+    dispatch({ type: UPDATE_ARTICLE, payload: article });
+  };
 
   //filter contacts
-
+  const filterArticles = (text) => {
+    dispatch({ type: FILTER_ARTICLES, payload: text });
+  };
   //clear filter
+  const clearFilter = () => {
+    dispatch({ type: CLEAR_FILTER });
+  };
 
   return (
-      <ArticleContext.Provider value={{
-          articles: state.posts
-      }}>
-          {props.children}
-      </ArticleContext.Provider>
-  )
+    <ArticleContext.Provider
+      value={{
+        articles: state.articles,
+        current: state.current,
+        filtered: state.filtered,
+        getArticles,
+        addArticle,
+        updateArticle,
+        deleteArticle,
+        setCurrentArticle,
+        clearCurrentArticle,
+        filterArticles,
+        clearFilter
+      }}
+    >
+      {props.children}
+    </ArticleContext.Provider>
+  );
 };
-
 
 export default ArticleState;

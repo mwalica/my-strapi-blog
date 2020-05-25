@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import { Link } from "react-router-dom";
+
+import ModalContext from '../../context/modal/modalContext';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -30,7 +32,8 @@ ul {
   li {
     padding: 0 1em;
     color: rgba(255, 255, 255, 0.9);
-    a {
+    a, .link {
+      cursor: pointer;
       color: inherit;
       transition: color 0.2s ease-in;
       &:hover {
@@ -43,6 +46,9 @@ ul {
 `;
 
 const Navbar = ({ title, icon }) => {
+
+  const modalContext = useContext(ModalContext);
+  const {showModal} = modalContext;
   return (
     <Wrapper>
       <Logo>
@@ -54,6 +60,12 @@ const Navbar = ({ title, icon }) => {
         <ul>
           <li>
             <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/blog">Blog</Link>
+          </li>
+          <li>
+            <span className="link" onClick={showModal}>Add Article</span>
           </li>
           <li>
             <Link to="/about">About</Link>

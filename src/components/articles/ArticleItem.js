@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import ArticleContext from "../../context/article/articleContext";
+import ModalContext from "../../context/modal/modalContext";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -15,6 +17,9 @@ const Card = styled.div`
   border-radius: 0.5em;
   box-shadow: 0 10px 10px -3px rgba(0, 0, 0, 0.1),
     0 4px 4px -2px rgba(0, 0, 0, 0.05);
+  img {
+    width: 100%;
+  }
 `;
 
 const CardContent = styled.div`
@@ -32,13 +37,16 @@ const CardFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   .icon-container {
-    a {
+    a,
+    div.icon {
+      cursor: pointer;
+      display: inline-block;
       padding: 0 0.2em;
       background-color: transparent;
-      color: ${({theme}) => theme.text};
+      color: ${({ theme }) => theme.text};
       transition: color 0.4s ease;
       &:hover {
-        color: ${({theme}) => theme.primary};
+        color: ${({ theme }) => theme.primary};
       }
       &:first-child {
         margin-right: 0.5em;
@@ -57,26 +65,47 @@ const CardFooter = styled.div`
   }
 `;
 
-const ArticleItem = ({ article, iconEdit, iconDelete }) => {
+const ArticleItem = ({ iconEdit, iconDelete, article }) => {
+
+  const modalContext = useContext(ModalContext);
+  const { showModal } = modalContext;
+
+  const articleContext = useContext(ArticleContext);
+  const { deleteArticle, setCurrentArticle, clearCurrentArticle } = articleContext;
+
   const { id, title, content, image, created_at } = article;
+
+  const deleteHandler = () => {
+    deleteArticle(id);
+    clearCurrentArticle();
+  };
+
+  const editHandler = () => {
+    setCurrentArticle(article);
+    showModal();
+  }
 
   const shortContent = content.slice(0, 200);
   return (
     <Wrapper>
       <Card>
-        <img src={image.formats.small.url} alt={title} />
+        <img
+          src={`http://localhost:1337${image.formats.medium.url}`}
+          alt={title}
+          width="400px"
+        />
         <CardContent>
           <h4>{title}</h4>
           <p>{shortContent}...</p>
         </CardContent>
         <CardFooter>
           <div className="icon-container">
-            <Link>
+            <div className="icon" onClick={editHandler}>
               <i className={iconEdit}></i>
-            </Link>
-            <Link>
-              <i className={iconDelete}></i>
-            </Link>
+            </div>
+            <div className="icon">
+              <i className={iconDelete} onClick={deleteHandler}></i>
+            </div>
           </div>
           <Link to={`posts/${id}`}>więcej</Link>
         </CardFooter>

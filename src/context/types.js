@@ -1,9 +1,14 @@
+export const GET_ARTICLES = 'ADD_ARTICLES';
 export const ADD_ARTICLE = 'ADD_ARTICLE';
 export const DELETE_ARTICLE = 'DELETE_ARTICLE';
 export const SET_CURRENT_ARTICLE = 'SET_CURRENT_ARTICLE';
 export const CLEAR_CURRENT_ARTICLE = 'CLEAR_CURRENT_ARTICLE';
 export const UPDATE_ARTICLE = 'UPDATE_ARTICLE';
 export const FILTER_ARTICLES = 'FILTER_ARTICLES';
+export const CLEAR_ARTICLE = 'CLEAR_ARTICLE';
 export const CLEAR_FILTER = 'CLEAR_FILTER';
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
+
+export const SHOW_MODAL = 'SHOW_MODAL'; 
+export const HIDE_MODAL = 'HIDE_MODAL'; 
