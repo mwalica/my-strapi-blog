@@ -14,20 +14,28 @@ const Wrapper = styled.div`
 const Articles = () => {
   const articleContext = useContext(ArticleContext);
   console.log(articleContext);
-  const { articles, getArticles, loading } = articleContext;
+  const { articles, filtered, getArticles, loading } = articleContext;
 
   useEffect(() => {
     getArticles();
     //es-lint-disable-next-line
   }, []);
 
+  if (articles.length === 0) {
+    return <h4>Please add article</h4>;
+  }
+
   return (
     <Wrapper>
       {articles !== null && !loading ? (
         <>
-          {articles.map((article) => (
-            <ArticleItem key={article.id} article={article} />
-          ))}
+          {filtered !== null
+            ? filtered.map((article) => (
+                <ArticleItem key={article.id} article={article} />
+              ))
+            : articles.map((article) => (
+                <ArticleItem key={article.id} article={article} />
+              ))}
         </>
       ) : (
         <Loader />
