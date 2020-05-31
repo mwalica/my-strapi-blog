@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
 import ModalContext from "../../context/modal/modalContext";
@@ -28,15 +28,15 @@ const Card = styled.div`
 
 const ModalContainer = ({ children }) => {
   const modalContext = useContext(ModalContext);
-  const {hideModal} = modalContext;
+  const { hideModal } = modalContext;
 
   const articleContext = useContext(ArticleContext);
-  const {clearCurrentArticle} = articleContext;
+  const { clearCurrentArticle } = articleContext;
 
   const clearSettings = () => {
     clearCurrentArticle();
     hideModal();
-  }
+  };
 
   return (
     <Wrapper onClick={clearSettings}>

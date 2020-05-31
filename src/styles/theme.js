@@ -6,6 +6,7 @@ const theme = {
     grayDark: '#233646',
     formBorder: '#F8D9C9',
     orange: '#ff9600',
+    danger: '#e53e3e',
     mainFont: '"Roboto", sans-serif'
 
 }

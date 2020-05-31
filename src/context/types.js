@@ -7,8 +7,21 @@ export const UPDATE_ARTICLE = 'UPDATE_ARTICLE';
 export const FILTER_ARTICLES = 'FILTER_ARTICLES';
 export const CLEAR_ARTICLE = 'CLEAR_ARTICLE';
 export const CLEAR_FILTER = 'CLEAR_FILTER';
+export const ARTICLE_ERROR = 'ARTICLE_ERROR';
+
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 
 export const SHOW_MODAL = 'SHOW_MODAL'; 
 export const HIDE_MODAL = 'HIDE_MODAL'; 
+export const SHOW_MODAL_AUTH = 'SHOW_MODAL_AUTH'; 
+export const HIDE_MODAL_AUTH = 'HIDE_MODAL_AUTH';
+
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+export const REGISTER_FAIL = 'REGISTER_FAIL';
+export const USER_LOADED = 'USER_LOADED';
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const LOGOUT = 'LOGOUT';
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';

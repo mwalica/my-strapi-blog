@@ -1,4 +1,7 @@
-import { SHOW_MODAL, HIDE_MODAL } from "../types";
+import {
+  SHOW_MODAL,
+  HIDE_MODAL
+} from "../types";
 
 export default (state, action) => {
   switch (action.type) {

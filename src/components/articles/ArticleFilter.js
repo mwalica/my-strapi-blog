@@ -47,7 +47,7 @@ const ArticleFilter = () => {
   });
 
   const changeHandler = (e) => {
-    if (text.current.value != "") {
+    if (text.current.value !== "") {
       articleContext.filterArticles(e.target.value);
     } else {
       articleContext.clearFilter();

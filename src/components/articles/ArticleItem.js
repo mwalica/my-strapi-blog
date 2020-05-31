@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+
+import AuthContext from "../../context/auth/authContext";
 import ArticleContext from "../../context/article/articleContext";
 import ModalContext from "../../context/modal/modalContext";
 
@@ -66,24 +68,35 @@ const CardFooter = styled.div`
 `;
 
 const ArticleItem = ({ iconEdit, iconDelete, article }) => {
-
   const modalContext = useContext(ModalContext);
   const { showModal } = modalContext;
 
   const articleContext = useContext(ArticleContext);
-  const { deleteArticle, setCurrentArticle, clearCurrentArticle } = articleContext;
+  const {
+    deleteArticle,
+    setCurrentArticle,
+    clearCurrentArticle,
+  } = articleContext;
 
-  const { id, title, content, image, created_at } = article;
+  const authContext = useContext(AuthContext);
+  const { token, isAuthenticated } = authContext;
+  console.log(authContext);
+
+  const { id, title, content, image, user } = article;
 
   const deleteHandler = () => {
-    deleteArticle(id);
+    deleteArticle(id, token);
     clearCurrentArticle();
   };
 
   const editHandler = () => {
     setCurrentArticle(article);
     showModal();
-  }
+  };
+
+  const detailHandler = () => {
+    setCurrentArticle(article);
+  };
 
   const shortContent = content.slice(0, 200);
   return (
@@ -99,15 +112,20 @@ const ArticleItem = ({ iconEdit, iconDelete, article }) => {
           <p>{shortContent}...</p>
         </CardContent>
         <CardFooter>
-          <div className="icon-container">
-            <div className="icon" onClick={editHandler}>
-              <i className={iconEdit}></i>
+          {isAuthenticated && user.username === authContext.user && (
+            <div className="icon-container">
+              <div className="icon" onClick={editHandler}>
+                <i className={iconEdit}></i>
+              </div>
+              <div className="icon">
+                <i className={iconDelete} onClick={deleteHandler}></i>
+              </div>
             </div>
-            <div className="icon">
-              <i className={iconDelete} onClick={deleteHandler}></i>
-            </div>
-          </div>
-          <Link to={`posts/${id}`}>więcej</Link>
+          )}
+
+          <Link to={`blog/${id}`} onClick={detailHandler}>
+            więcej
+          </Link>
         </CardFooter>
       </Card>
     </Wrapper>

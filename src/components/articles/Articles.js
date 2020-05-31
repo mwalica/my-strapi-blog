@@ -1,9 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
+
 import ArticleContext from "../../context/article/articleContext";
+import AlertContext from "../../context/alert/alertContext";
 
 import Loader from "../layout/Loader";
 import ArticleItem from "./ArticleItem";
+import Alerts from '../layout/Alerts';
 
 const Wrapper = styled.div`
   display: grid;
@@ -13,19 +16,27 @@ const Wrapper = styled.div`
 
 const Articles = () => {
   const articleContext = useContext(ArticleContext);
-  console.log(articleContext);
-  const { articles, filtered, getArticles, loading } = articleContext;
+  const { error, articles, filtered, loading, getArticles, clearErrors } = articleContext;
+
+  
+  const alertContext = useContext(AlertContext);
+  const {setAlert} = alertContext;
 
   useEffect(() => {
     getArticles();
+    if(error === "delete error") {
+      setAlert(error, "danger");
+      clearErrors();
+    }
     //es-lint-disable-next-line
-  }, []);
+  }, [error]);
 
-  if (articles.length === 0) {
+  if (articles !== null && articles.length === 0 & !loading) {
     return <h4>Please add article</h4>;
   }
 
   return (
+    <>
     <Wrapper>
       {articles !== null && !loading ? (
         <>
@@ -41,6 +52,8 @@ const Articles = () => {
         <Loader />
       )}
     </Wrapper>
+    <Alerts />
+    </>
   );
 };
 

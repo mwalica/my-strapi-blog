@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from "styled-components";
 import Section from '../../styles/Section';
 import ArticleFilter from '../articles/ArticleFilter';
 

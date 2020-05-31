@@ -31,7 +31,6 @@ const GlobalStyle = createGlobalStyle`
         color: #233646;
     }
 
-
 `;
 
 export default GlobalStyle;

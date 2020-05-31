@@ -2,11 +2,14 @@ import React, { useReducer } from "react";
 import ModalContext from "./modalContext";
 import modalReducer from "./modalReducer";
 
-import {SHOW_MODAL, HIDE_MODAL} from "../types";
+import {
+  SHOW_MODAL,
+  HIDE_MODAL
+} from "../types";
 
 const ModalState = (props) => {
   const initialState = {
-    modal: false,
+    modal: false
   };
 
   const [state, dispatch] = useReducer(modalReducer, initialState);
@@ -17,11 +20,19 @@ const ModalState = (props) => {
   };
 
   //set hide modal
-  const hideModal = (e) => {
+  const hideModal = () => {
     dispatch({ type: HIDE_MODAL });
   };
+
+
   return (
-    <ModalContext.Provider value={{ modal: state.modal, showModal, hideModal }}>
+    <ModalContext.Provider
+      value={{
+        modal: state.modal,
+        showModal,
+        hideModal,
+      }}
+    >
       {props.children}
     </ModalContext.Provider>
   );

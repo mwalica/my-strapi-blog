@@ -11,7 +11,9 @@ import {
   CLEAR_CURRENT_ARTICLE,
   UPDATE_ARTICLE,
   FILTER_ARTICLES,
+  CLEAR_ERRORS,
   CLEAR_FILTER,
+  ARTICLE_ERROR,
 } from "../types";
 
 const ArticleState = (props) => {
@@ -20,6 +22,7 @@ const ArticleState = (props) => {
     current: null,
     filtered: null,
     loading: true,
+    error: null,
   };
 
   const [state, dispatch] = useReducer(articleReducer, initialState);
@@ -36,14 +39,44 @@ const ArticleState = (props) => {
   };
 
   //add article
-  const addArticle = (article) => {
-    article.id = uuidv4();
-    dispatch({ type: ADD_ARTICLE, payload: article });
+  const addArticle = async (article, token) => {
+    try {
+      const res = await axios.post("http://localhost:1337/articles", article, {
+        headers: { Authorization: `Bearer ${token}` }});
+      article.id = uuidv4();
+      dispatch({ type: ADD_ARTICLE, payload: article });
+    } catch (err) {
+      dispatch({ type: ARTICLE_ERROR, payload: "add article error" });
+    }
   };
 
   //delete article
-  const deleteArticle = (id) => {
-    dispatch({ type: DELETE_ARTICLE, payload: id });
+  const deleteArticle = async (id, token) => {
+
+    try {
+      await axios.delete(`http://localhost:1337/articles/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch({ type: DELETE_ARTICLE, payload: id });
+    } catch (err) {
+      dispatch({ type: ARTICLE_ERROR, payload: "delete error" });
+    }
+
+    
+  };
+
+   //update contact
+   const updateArticle = async (article, token) => {
+    try {
+      const res = await axios.put(`http://localhost:1337/articles/${article.id}`, article, {
+        headers: { Authorization: `Bearer ${token}` }});
+      article.id = uuidv4();
+      dispatch({ type: UPDATE_ARTICLE, payload: article });
+    } catch (err) {
+      dispatch({ type: ARTICLE_ERROR, payload: "update article error" });
+    }
   };
 
   //set current article
@@ -54,10 +87,7 @@ const ArticleState = (props) => {
   const clearCurrentArticle = () => {
     dispatch({ type: CLEAR_CURRENT_ARTICLE });
   };
-  //update contact
-  const updateArticle = (article) => {
-    dispatch({ type: UPDATE_ARTICLE, payload: article });
-  };
+ 
 
   //filter contacts
   const filterArticles = (text) => {
@@ -68,12 +98,17 @@ const ArticleState = (props) => {
     dispatch({ type: CLEAR_FILTER });
   };
 
+  //clear errors article
+  const clearErrors = () => dispatch({ type: CLEAR_ERRORS});
+
   return (
     <ArticleContext.Provider
       value={{
         articles: state.articles,
         current: state.current,
         filtered: state.filtered,
+        error: state.error,
+        loading: state.loading,
         getArticles,
         addArticle,
         updateArticle,
@@ -81,7 +116,8 @@ const ArticleState = (props) => {
         setCurrentArticle,
         clearCurrentArticle,
         filterArticles,
-        clearFilter
+        clearFilter,
+        clearErrors
       }}
     >
       {props.children}

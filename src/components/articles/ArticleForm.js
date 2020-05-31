@@ -4,8 +4,12 @@ import axios from "axios";
 
 import ArticleContext from "../../context/article/articleContext";
 import ModalContext from "../../context/modal/modalContext";
+import AuthContext from "../../context/auth/authContext";
+import AlertContext from "../../context/alert/alertContext";
+
 
 import ModalContainer from "../layout/ModalContainer";
+import Alerts from '../layout/Alerts';
 import ImageInput from "../../styles/ImageInput";
 
 const Wrapper = styled.form`
@@ -71,12 +75,22 @@ const FormField = styled.div`
 `;
 
 const ArticleForm = () => {
-
   const modalContext = useContext(ModalContext);
   const { hideModal } = modalContext;
 
   const articleContext = useContext(ArticleContext);
-  const { addArticle, updateArticle, current, clearCurrentArticle } = articleContext;
+  const {
+    addArticle,
+    updateArticle,
+    current,
+    clearCurrentArticle,
+  } = articleContext;
+
+  const alertContext = useContext(AlertContext);
+  const {setAlert} = alertContext;
+
+  const authContext = useContext(AuthContext);
+  const { token } = authContext;
 
   useEffect(() => {
     if (current !== null) {
@@ -96,7 +110,7 @@ const ArticleForm = () => {
     image: "",
   });
 
-  const { title, content } = article;
+  const { title, content, image } = article;
 
   const changeHandler = (e) => {
     setArticle({ ...article, [e.target.name]: e.target.value });
@@ -118,13 +132,18 @@ const ArticleForm = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if(current === null) {
-      addArticle(article);
+    if (title === "" || content === "" || image === "") {
+      setAlert("Please enter all fields", "danger");
     } else {
-     updateArticle(article);
+      if (current === null) {
+        addArticle(article, token);
+      } else {
+        updateArticle(article, token);
+      }
+
+      clearAll();
+      hideModal();
     }
-    clearAll();
-    hideModal();
   };
 
   const clearAll = () => {
@@ -180,6 +199,7 @@ const ArticleForm = () => {
           />
         </FormField>
       </Wrapper>
+      <Alerts />
     </ModalContainer>
   );
 };
